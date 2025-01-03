@@ -1,5 +1,5 @@
 'use strict';
-
+//Every migration needs lines 3-6 at the top
 let options = {};
 if (process.env.NODE_ENV === 'production') {
   options.schema = process.env.SCHEMA;  // define your schema in options object
@@ -46,3 +46,4 @@ module.exports = {
     return queryInterface.dropTable(options);
   }
 };
+//Every single migration must have options passed in i.e. line 56.

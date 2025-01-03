@@ -2,7 +2,7 @@
 
 const { User } = require('../models');
 const bcrypt = require("bcryptjs");
-
+//options go into every seeder, at the top
 let options = {};
 if (process.env.NODE_ENV === 'production') {
   options.schema = process.env.SCHEMA;  // define your schema in options object

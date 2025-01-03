@@ -56,6 +56,7 @@
 const router = require('express').Router();
 const sessionRouter = require('./session.js');
 const usersRouter = require('./users.js');
+const spotsRouter = require('./spots.js'); //like this line 70
 const { restoreUser } = require("../../utils/auth.js");
 
 // Connect restoreUser middleware to the API router
@@ -66,7 +67,8 @@ router.use(restoreUser);
 router.use('/session', sessionRouter);
 
 router.use('/users', usersRouter);
-
+//After I build the route file, i must import the route file i.e. line 58 - and I must define the url that points to that router file.
+router.use('/spots',spotsRouter);
 router.post('/test', (req, res) => {
   res.json({ requestBody: req.body });
 });

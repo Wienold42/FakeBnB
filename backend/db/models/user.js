@@ -54,3 +54,4 @@ module.exports = (sequelize, DataTypes) => {
   );
   return User;
 };
+//Every single migration must have options passed in i.e. line 56.
