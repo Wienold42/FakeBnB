@@ -43,6 +43,15 @@ router.get('/', async (req,res)=> {
     let spots = await Spot.findAll()
     return res.json(spots)
 })
+
+router.get ('/:ownerId', requireAuth, async (req,res)=> {
+  if (ownerId === spotId(ownerId)){
+    return (Spot) // syntax???
+  } // THIS IS OUR QUESTION: how do we match the owner ID for authorization purposes
+
+});
+
+
 router.get ('/:spotId', async (req,res)=> {
     let spots = await Spot.findByPk(req.params.spotId)
     if(!spots){
