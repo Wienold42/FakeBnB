@@ -5,7 +5,8 @@ const express = require('express')
 //Every route file must import its model.
 const { Spot } = require('../../db/models');
 const router = express.Router();
-const {requireAuth} = require('../../utils/auth')
+const {requireAuth} = require('../../utils/auth');
+const { where } = require('sequelize');
 
 const validateSpots = [
     check('address')
@@ -38,17 +39,71 @@ const validateSpots = [
     handleValidationErrors
   ];
 
+  // "Create a Spot" / API box
+  router.post('/', requireAuth, validateSpots, async (req, res) => {
+    try {
+        const {
+            address,
+            city,
+            state,
+            country,
+            lat,
+            lng,
+            name,
+            description,
+            price,
+        } = req.body;
+
+        const newSpot = await Spot.create({
+            ownerId: req.user.id,
+            address,
+            city,
+            state,
+            country,
+            lat,
+            lng,
+            name,
+            description,
+            price,
+        });
+
+        // Respond with a 201 status code and the spot details
+        return res.status(201).json({
+            id: newSpot.id,
+            ownerId: newSpot.ownerId,
+            address: newSpot.address,
+            city: newSpot.city,
+            state: newSpot.state,
+            country: newSpot.country,
+            lat: newSpot.lat,
+            lng: newSpot.lng,
+            name: newSpot.name,
+            description: newSpot.description,
+            price: newSpot.price,
+            createdAt: newSpot.createdAt,
+            updatedAt: newSpot.updatedAt,
+        });
+    } catch (error) {
+        console.error('Error creating a new spot:', error);
+        return res.status(500).json({
+            message: "Internal server error",
+        });
+    }
+});
+
 
 router.get('/', async (req,res)=> {
     let spots = await Spot.findAll()
     return res.json(spots)
 })
 
-router.get ('/:ownerId', requireAuth, async (req,res)=> {
-  if (ownerId === spotId(ownerId)){
-    return (Spot) // syntax???
-  } // THIS IS OUR QUESTION: how do we match the owner ID for authorization purposes
-
+router.get ('/current', requireAuth, async (req,res)=> {{
+  let spotOwnerId = req.user.id
+  let spots = await Spot.findAll({where:{
+    ownerId: spotOwnerId
+  }})
+  return res.json(spots)
+  } 
 });
 
 
