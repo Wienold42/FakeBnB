@@ -21,7 +21,6 @@ router.get('/current', requireAuth, async (req, res) => {
                     include: [
                         {
                             model: SpotImage,
-                            as: 'previewImage',
                             attributes: ['url'],
                             where: { preview: true },
                             required: false,
@@ -49,6 +48,47 @@ router.get('/current', requireAuth, async (req, res) => {
         return res.status(200).json({ reviews: formattedReviews });
     } catch (error) {
         console.error('Error fetching current user reviews:', error);
+        return res.status(500).json({
+            message: "Internal server error",
+        });
+    }
+});
+
+
+//BUILD POST FOR REVIEW IMAGE
+
+router.post('/reviews/:reviewId/images', requireAuth, async (req, res) => {
+    const { reviewId } = req.params;
+    const { url } = req.body;
+
+    try {
+        const review = await Review.findByPk(reviewId);
+
+        if (!review) {
+            return res.status(404).json({
+                message: "Review couldn't be found",
+            });
+        }
+
+        const imageCount = await ReviewImage.count({ where: { reviewId } });
+
+        if (imageCount >= 10) {
+            return res.status(403).json({
+                message: "Maximum number of images for this resource was reached",
+            });
+        }
+
+        const newImage = await ReviewImage.create({
+            reviewId,
+            url,
+        });
+
+        return res.status(201).json({
+            id: newImage.id,
+            url: newImage.url,
+        });
+    } catch (error) {
+        console.error('Error adding image to review:', error);
         return res.status(500).json({
             message: "Internal server error",
         });

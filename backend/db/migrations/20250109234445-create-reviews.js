@@ -13,14 +13,12 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      id: {
-        type: Sequelize.INTEGER
-      },
       review: {
         type: Sequelize.STRING
       },
       userId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER, 
+        references:{model:'Users', key:'id'}
       },
       spotId: {
         type: Sequelize.INTEGER

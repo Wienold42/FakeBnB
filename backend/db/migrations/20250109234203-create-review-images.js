@@ -16,7 +16,7 @@ module.exports = {
       id: {
         type: Sequelize.INTEGER
       },
-      reveiwId: {
+      reviewId: {
         type: Sequelize.INTEGER
       },
       url: {
