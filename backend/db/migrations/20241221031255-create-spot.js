@@ -57,6 +57,7 @@ module.exports = {
   },
   async down(queryInterface, Sequelize) {
     options.tableName = "Spots";
+    await queryInterface.removeConstraint("custom_name.SpotImages", "SpotImages_spotId_fkey")
     return queryInterface.dropTable(options);
   }
 };
