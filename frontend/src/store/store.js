@@ -1,0 +1,23 @@
+// frontend/src/store/store.js
+import { configureStore, combineReducers, applyMiddleware, compose } from 'redux';
+import thunk from 'redux-thunk';
+
+const rootReducer = combineReducers({
+  // will fill in later
+});
+
+let enhancer;
+if (import.meta.env.MODE === 'production') {
+  enhancer = applyMiddleware(thunk);
+} else {
+  const logger = (await import('redux-logger')).default;
+  const composeEnhancers =
+    window.REDUX_DEVTOOLS_EXTENSION_COMPOSE || compose;
+  enhancer = composeEnhancers(applyMiddleware(thunk, logger));
+}
+
+const configureStore = (preloadedState) => {
+  return createStore(rootReducer, preloadedState, enhancer);
+};
+
+export default configureStore;
